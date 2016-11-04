@@ -3,19 +3,19 @@ import java.util.*;
 public class Prim {
     private boolean unsettled[];
     private boolean settled[];
-    private int numberofvertices;
-    private int adjacencyMatrix[][];
+    private int numVertices;
+    private int matrix[][];
     private int key[];
     public static final int INFINITE = 999;
     private int parent[];
  
-    public Prim(int numberofvertices) {
-        this.numberofvertices = numberofvertices;
-        unsettled = new boolean[numberofvertices + 1];
-        settled = new boolean[numberofvertices + 1];
-        adjacencyMatrix = new int[numberofvertices + 1][numberofvertices + 1];
-        key = new int[numberofvertices + 1];
-        parent = new int[numberofvertices + 1];
+    public Prim(int numVertices) {
+        this.numVertices = numVertices;
+        unsettled = new boolean[numVertices + 1];
+        settled = new boolean[numVertices + 1];
+        matrix = new int[numVertices + 1][numVertices + 1];
+        key = new int[numVertices + 1];
+        parent = new int[numVertices + 1];
     }
  
     public int getUnsettledCount(boolean unsettled[]) {
@@ -30,13 +30,13 @@ public class Prim {
  
     public void primsAlgorithm(int adjacencyMatrix[][]) {
         int evaluationVertex;
-        for (int source = 1; source <= numberofvertices; source++) {
-            for (int destination = 1; destination <= numberofvertices; destination++) {
-                this.adjacencyMatrix[source][destination] = adjacencyMatrix[source][destination];
+        for (int source = 1; source <= numVertices; source++) {
+            for (int destination = 1; destination <= numVertices; destination++) {
+                this.matrix[source][destination] = adjacencyMatrix[source][destination];
             }
         }
  
-        for (int index = 1; index <= numberofvertices; index++) {
+        for (int index = 1; index <= numVertices; index++) {
             key[index] = INFINITE;
         }
         key[1] = 0;
@@ -54,7 +54,7 @@ public class Prim {
     private int getMimumKeyVertexFromUnsettled(boolean[] unsettled2) {
         int min = Integer.MAX_VALUE;
         int node = 0;
-        for (int vertex = 1; vertex <= numberofvertices; vertex++) {
+        for (int vertex = 1; vertex <= numVertices; vertex++) {
             if (unsettled[vertex] == true && key[vertex] < min) {
                 node = vertex;
                 min = key[vertex];
@@ -63,15 +63,15 @@ public class Prim {
         return node;
     }
  
-    public void evaluateNeighbours(int evaluationVertex) {
-        for (int destinationvertex = 1; destinationvertex <= numberofvertices; destinationvertex++) {
-            if (settled[destinationvertex] == false) {
-                if (adjacencyMatrix[evaluationVertex][destinationvertex] != INFINITE) {
-                    if (adjacencyMatrix[evaluationVertex][destinationvertex] < key[destinationvertex]) {
-                        key[destinationvertex] = adjacencyMatrix[evaluationVertex][destinationvertex];
-                        parent[destinationvertex] = evaluationVertex;
+    public void evaluateNeighbours(int eVertex) {
+        for (int d = 1; d <= numVertices; d++) {
+            if (settled[d] == false) {
+                if (matrix[eVertex][d] != INFINITE) {
+                    if (matrix[eVertex][d] < key[d]) {
+                        key[d] = matrix[eVertex][d];
+                        parent[d] = eVertex;
                     }
-                    unsettled[destinationvertex] = true;
+                    unsettled[d] = true;
                 }
             }
         }
@@ -79,24 +79,23 @@ public class Prim {
  
     public void printMST() {
         System.out.println("SOURCE  : DESTINATION = WEIGHT");
-        for (int vertex = 2; vertex <= numberofvertices; vertex++) {
-            System.out.println(parent[vertex] + "\t:\t" + vertex +"\t=\t"+ adjacencyMatrix[parent[vertex]][vertex]);
+        for (int v = 2; v <= numVertices; v++) {
+            System.out.println(parent[v] + "\t:\t" + v +"\t=\t"+ matrix[parent[v]][v]);
         }
     }
  
     public static void main(String... arg) {
         int adjacency_matrix[][];
-        int number_of_vertices;
+        int numVer;
         Scanner scan = new Scanner(System.in);
  
         try {
-            System.out.println("Enter the number of vertices");
-            number_of_vertices = scan.nextInt();
-            adjacency_matrix = new int[number_of_vertices + 1][number_of_vertices + 1];
-            System.out.println("Enter the Weighted Matrix for the graph");
-            
-            for (int i = 1; i <= number_of_vertices; i++) {
-                for (int j = 1; j <= number_of_vertices; j++) {
+            System.out.println("Number of vertices");
+            numVer = scan.nextInt();
+            adjacency_matrix = new int[numVer + 1][numVer + 1];
+            System.out.println("Weighted Matrix");
+            for (int i = 1; i <= numVer; i++) {
+                for (int j = 1; j <= numVer; j++) {
                     adjacency_matrix[i][j] = scan.nextInt();
                     if (i == j) {
                         adjacency_matrix[i][j] = 0;
@@ -107,11 +106,9 @@ public class Prim {
                     }
                 }
             }
- 
-            Prim prims = new Prim(number_of_vertices);
+            Prim prims = new Prim(numVer);
             prims.primsAlgorithm(adjacency_matrix);
             prims.printMST();
- 
         } 
         catch (InputMismatchException inputMismatch) {
             System.out.println("Wrong Input Format");

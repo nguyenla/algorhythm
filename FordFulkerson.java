@@ -5,40 +5,39 @@ import java.util.Scanner;
 public class FordFulkerson {
     private int[] parent;
     private Queue<Integer> queue;
-    private int numberOfVertices;
+    private int numVertices;
     private boolean[] visited;
  
-    public FordFulkerson(int numberOfVertices) {
-        this.numberOfVertices = numberOfVertices;
+    public FordFulkerson(int numVertices) {
+        this.numVertices = numVertices;
         this.queue = new LinkedList<Integer>();
-        parent = new int[numberOfVertices + 1];
-        visited = new boolean[numberOfVertices + 1];		
+        parent = new int[numVertices + 1];
+        visited = new boolean[numVertices + 1];		
     }
  
-    public boolean bfs(int source, int goal, int graph[][]) {
+    public boolean bfs(int s, int goal, int graph[][]) {
         boolean pathFound = false;
-        int destination, element;
+        int d, element;
  
-        for(int vertex = 1; vertex <= numberOfVertices; vertex++) {
+        for(int vertex = 1; vertex <= numVertices; vertex++) {
             parent[vertex] = -1;
             visited[vertex] = false;
         }
- 
-        queue.add(source);
-        parent[source] = -1;
-        visited[source] = true;
+        queue.add(s);
+        parent[s] = -1;
+        visited[s] = true;
  
         while (!queue.isEmpty()) { 
             element = queue.remove();
-            destination = 1;
+            d = 1;
  
-            while (destination <= numberOfVertices) {
-                if (graph[element][destination] > 0 &&  !visited[destination]) {
-                    parent[destination] = element;
-                    queue.add(destination);
-                    visited[destination] = true;
+            while (d <= numVertices) {
+                if (graph[element][d] > 0 &&  !visited[d]) {
+                    parent[d] = element;
+                    queue.add(d);
+                    visited[d] = true;
                 }
-                destination++;
+                d++;
             }
         }
         if(visited[goal]) {
@@ -47,25 +46,25 @@ public class FordFulkerson {
         return pathFound;
     }
  
-    public int fordFulkerson(int graph[][], int source, int destination) {
+    public int fordFulkerson(int graph[][], int s, int d) {
         int u, v;
         int maxFlow = 0;
         int pathFlow;
  
-        int[][] residualGraph = new int[numberOfVertices + 1][numberOfVertices + 1];
-        for (int sourceVertex = 1; sourceVertex <= numberOfVertices; sourceVertex++) {
-            for (int destinationVertex = 1; destinationVertex <= numberOfVertices; destinationVertex++) {
-                residualGraph[sourceVertex][destinationVertex] = graph[sourceVertex][destinationVertex];
+        int[][] residualGraph = new int[numVertices + 1][numVertices + 1];
+        for (int sVertex = 1; sVertex <= numVertices; sVertex++) {
+            for (int dVertex = 1; dVertex <= numVertices; dVertex++) {
+                residualGraph[sVertex][dVertex] = graph[sVertex][dVertex];
             }
         }
  
-        while (bfs(source ,destination, residualGraph)) {
+        while (bfs(s ,d, residualGraph)) {
             pathFlow = Integer.MAX_VALUE;
-            for (v = destination; v != source; v = parent[v]) {
+            for (v = d; v != s; v = parent[v]) {
                 u = parent[v];
                 pathFlow = Math.min(pathFlow, residualGraph[u][v]);
             }
-            for (v = destination; v != source; v = parent[v]) {
+            for (v = d; v != s; v = parent[v]) {
                 u = parent[v];
                 residualGraph[u][v] -= pathFlow;
                 residualGraph[v][u] += pathFlow;
@@ -77,29 +76,27 @@ public class FordFulkerson {
  
     public static void main(String...arg) {
         int[][] graph;
-        int numberOfNodes;
+        int numNodes;
         int source;
         int sink;
         int maxFlow;
  
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the number of nodes");
-        numberOfNodes = scanner.nextInt();
-        graph = new int[numberOfNodes + 1][numberOfNodes + 1];
+        numNodes = scanner.nextInt();
+        graph = new int[numNodes + 1][numNodes + 1];
  
         System.out.println("Enter the graph matrix");
-        for (int sourceVertex = 1; sourceVertex <= numberOfNodes; sourceVertex++) {
-           for (int destinationVertex = 1; destinationVertex <= numberOfNodes; destinationVertex++) {
-               graph[sourceVertex][destinationVertex] = scanner.nextInt();
+        for (int sVertex = 1; sVertex <= numNodes; sVertex++) {
+           for (int dVertex = 1; dVertex <= numNodes; dVertex++) {
+               graph[sVertex][dVertex] = scanner.nextInt();
            }
         }
- 
-        System.out.println("Enter the source of the graph");
+        System.out.println("Source:");
         source= scanner.nextInt();
-        System.out.println("Enter the sink of the graph");
+        System.out.println("Sink:");
         sink = scanner.nextInt();
- 
-        FordFulkerson fordFulkerson = new FordFulkerson(numberOfNodes);
+        FordFulkerson fordFulkerson = new FordFulkerson(numNodes);
         maxFlow = fordFulkerson.fordFulkerson(graph, source, sink);
         System.out.println("The Max Flow is " + maxFlow);
         scanner.close();

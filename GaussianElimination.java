@@ -4,7 +4,6 @@ public class GaussianElimination {
     public void solve(double[][] A, double[] B) {
         int N = B.length;
         for (int k = 0; k < N; k++) {
-            /** find pivot row **/
             int max = k;
             for (int i = k + 1; i < N; i++) 
                 if (Math.abs(A[i][k]) > Math.abs(A[max][k])) 
@@ -28,7 +27,6 @@ public class GaussianElimination {
                     A[i][j] -= factor * A[k][j];
             }
         }
- 
         printRowEchelonForm(A, B);
  
         /** back substitution **/
@@ -39,7 +37,6 @@ public class GaussianElimination {
                 sum += A[i][j] * solution[j];
             solution[i] = (B[i] - sum) / A[i][i];
         }        
-        /** Print solution **/
         printSolution(solution);
     }
     
@@ -65,16 +62,13 @@ public class GaussianElimination {
     public static void main (String[] args) {
         Scanner scan = new Scanner(System.in);
         System.out.println("Gaussian Elimination Algorithm Test\n");
-        /** Make an object of GaussianElimination class **/
         GaussianElimination ge = new GaussianElimination();
- 
         System.out.println("\nEnter number of variables");
         int N = scan.nextInt();
- 
         double[] B = new double[N];
         double[][] A = new double[N][N];
  
-        System.out.println("\nEnter "+ N +" equations coefficients ");
+        System.out.println("\nEnter equations coefficients ");
         for (int i = 0; i < N; i++)
             for (int j = 0; j < N; j++)
                 A[i][j] = scan.nextDouble();

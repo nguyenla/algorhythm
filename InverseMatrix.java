@@ -3,7 +3,7 @@ import java.util.Scanner;
 public class InverseMatrix {
 	public static void main(String argv[]) {
 		Scanner input = new Scanner(System.in);
-		System.out.println("Enter the dimension of square matrix: ");
+		System.out.println("Enter the dimension of matrix: ");
 		int n = input.nextInt();
 		double a[][]= new double[n][n];
 		System.out.println("Enter the elements of matrix: ");
@@ -55,7 +55,7 @@ public class InverseMatrix {
 		return x;
 	}
 
-	// Method to carry out the partial-pivoting Gaussian elimination. Here index[] stores pivoting order.
+	// Carry out the partial-pivoting Gaussian elimination.
 	public static void gaussian(double a[][], int index[]) {
 		int n = index.length;
 		double c[] = new double[n];

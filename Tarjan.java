@@ -27,7 +27,6 @@ class Tarjan {
 		for (int v = 0; v < V; v++)
 			if (!visited[v])
 				dfs(v);
-
 		return sccComp;
 	}
 	
@@ -61,7 +60,6 @@ class Tarjan {
 		System.out.println("Tarjan algorithm Test\n");
 		System.out.println("Enter number of Vertices");
 		int V = scan.nextInt();
-
 		List<Integer>[] g = new List[V];        
 		for (int i = 0; i < V; i++)
 			g[i] = new ArrayList<Integer>();

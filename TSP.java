@@ -9,8 +9,8 @@ public class TSP {
         stack = new Stack<Integer>();
     }
  
-    public void tsp(int adjacencyMatrix[][]) {
-        numberOfNodes = adjacencyMatrix[1].length - 1;
+    public void tsp(int matrix[][]) {
+        numberOfNodes = matrix[1].length - 1;
         int[] visited = new int[numberOfNodes + 1];
         visited[1] = 1;
         stack.push(1);
@@ -23,9 +23,9 @@ public class TSP {
             i = 1;
             min = Integer.MAX_VALUE;
             while (i <= numberOfNodes) {
-                if (adjacencyMatrix[element][i] > 1 && visited[i] == 0) {
-                    if (min > adjacencyMatrix[element][i]) {
-                        min = adjacencyMatrix[element][i];
+                if (matrix[element][i] > 1 && visited[i] == 0) {
+                    if (min > matrix[element][i]) {
+                        min = matrix[element][i];
                         dst = i;
                         minFlag = true;
                     }
@@ -44,29 +44,29 @@ public class TSP {
     }
  
     public static void main(String... arg) {
-        int number_of_nodes;
+        int numNodes;
         Scanner scanner = null;
         try {
-            System.out.println("Enter the number of nodes in the graph");
+            System.out.println("Enter the number of nodes:");
             scanner = new Scanner(System.in);
-            number_of_nodes = scanner.nextInt();
-            int adjacency_matrix[][] = new int[number_of_nodes + 1][number_of_nodes + 1];
+            numNodes = scanner.nextInt();
+            int matrix[][] = new int[numNodes + 1][numNodes + 1];
             System.out.println("Enter the adjacency matrix");
-            for (int i = 1; i <= number_of_nodes; i++) {
-                for (int j = 1; j <= number_of_nodes; j++) {
-                    adjacency_matrix[i][j] = scanner.nextInt();
+            for (int i = 1; i <= numNodes; i++) {
+                for (int j = 1; j <= numNodes; j++) {
+                	matrix[i][j] = scanner.nextInt();
                 }
             }
-            for (int i = 1; i <= number_of_nodes; i++) {
-                for (int j = 1; j <= number_of_nodes; j++) {
-                    if (adjacency_matrix[i][j] == 1 && adjacency_matrix[j][i] == 0) {
-                        adjacency_matrix[j][i] = 1;
+            for (int i = 1; i <= numNodes; i++) {
+                for (int j = 1; j <= numNodes; j++) {
+                    if (matrix[i][j] == 1 && matrix[j][i] == 0) {
+                    	matrix[j][i] = 1;
                     }
                 }
             }
             System.out.println("The cities are visited as follows: ");
             TSP tspNearestNeighbour = new TSP();
-            tspNearestNeighbour.tsp(adjacency_matrix);
+            tspNearestNeighbour.tsp(matrix);
         }
         catch (InputMismatchException inputMismatch) {
             System.out.println("Wrong Input format");
