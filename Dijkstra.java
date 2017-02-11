@@ -5,28 +5,32 @@ public class Dijkstra {
 	private Set<Integer> settled;
 	private PriorityQueue<Node> priorityQueue;
 	private int numNodes;
-	private int matrix[][]; //adjacency matrix
+	private int matrix[][]; // adjacency matrix representation
 
+	// initialize all fields
 	public Dijkstra(int number_of_nodes) {
 		this.numNodes = number_of_nodes;
 		distances = new int[numNodes + 1];
 		settled = new HashSet<Integer>();
-		priorityQueue = new PriorityQueue<Node>(numNodes,new Node());
+		priorityQueue = new PriorityQueue<Node>(numNodes, new Node());
 		matrix = new int[numNodes + 1][numNodes + 1];
 	}
 
 	public void dijkstra_algorithm(int adjacency_matrix[][], int source) {
 		int evaluationNode;
+		// read graph in
 		for (int i = 1; i <= numNodes; i++)
 			for (int j = 1; j <= numNodes; j++)
 				matrix[i][j] = adjacency_matrix[i][j];
 
+		// initialized distance array
 		for (int i = 1; i <= numNodes; i++) {
 			distances[i] = Integer.MAX_VALUE;
 		}
 
 		priorityQueue.add(new Node(source, 0));
 		distances[source] = 0;
+		
 		while (!priorityQueue.isEmpty()) {
 			evaluationNode = getNodeWithMinimumDistanceFromPriorityQueue();
 			settled.add(evaluationNode);
@@ -92,8 +96,37 @@ public class Dijkstra {
 			System.out.println("Wrong Input Format");
 		}
 	}	
+	
+	private class Edge {
+	    int v;
+	    long cost;
+	    
+	    public Edge(int a, int c) {
+	        v = a;
+	        cost = c;
+	    }
+	}
 }
 
+
+
+//class Node implements Comparable<Node>{
+//    int vertex;
+//    long distance;
+//    
+//    public Node(int v, long d) {
+//        vertex = v;
+//        distance = d;
+//    }
+//    
+//    public int compareTo(Node b) {
+//        if (this.distance < b.distance) return -1;
+//        else return 1;
+//    }
+//}
+
+// A class representing a node
+// This class implements Comparator in order to be used in priority queue
 class Node implements Comparator<Node> {
 	public int node;
 	public int cost;
