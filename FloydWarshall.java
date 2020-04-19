@@ -1,30 +1,28 @@
-import java.util.Scanner;
+import java.util.*;
  
 public class FloydWarshall {
-    private int matrix[][];
+    private int graph[][];
     private int numVertices;
-    public static final int INFINITY = 999;
- 
-    public FloydWarshall(int vertices) {
-    	matrix = new int[vertices + 1][vertices + 1];
-        this.numVertices = vertices;
+    public static final int INFINITY = Integer.MAX_VALUE;
+    
+    public FloydWarshall(int[][] matrix) {
+    	graph = matrix;
+    	numVertices = graph.length - 1;
     }
- 
-    public void floydwarshall(int mat[][]) {
-        for (int s = 1; s <= numVertices; s++) {
-            for (int d = 1; d <= numVertices; d++) {
-            	matrix[s][d] = mat[s][d];
-            }
-        }
-        for (int i = 1; i <= numVertices; i++) { // i = intermediate
+
+    // Run Floyd-Warshall algorithm
+    public void floydwarshall() {
+       for (int i = 1; i <= numVertices; i++) { // intermediate vertex
             for (int s = 1; s <= numVertices; s++) {
                 for (int d = 1; d <= numVertices; d++) {
-                    if (matrix[s][i] + matrix[i][d] < matrix[s][d])
-                    	matrix[s][d] = matrix[s][i] + matrix[i][d];
+                    if (graph[s][i] != INFINITY && graph[i][d] != INFINITY && 
+                    		graph[s][i] + graph[i][d] < graph[s][d])
+                    	graph[s][d] = graph[s][i] + graph[i][d];
                 }
             }
         }
         
+       // Print out the matrix
         for (int s = 1; s <= numVertices; s++) {
             System.out.print("\t" + s);
         }
@@ -32,35 +30,38 @@ public class FloydWarshall {
         for (int s = 1; s <= numVertices; s++) {
             System.out.print(s + "\t");
             for (int d = 1; d <= numVertices; d++) {
-                System.out.print(matrix[s][d] + "\t");
+            	if (graph[s][d] == INFINITY) {
+            		System.out.print(-1 + "\t");
+            	}
+            	else {
+            		System.out.print(graph[s][d] + "\t");
+            	}
             }
             System.out.println();
         }
     }
  
     public static void main(String... arg) {
-        int matrix[][];
-        int numVertices;
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Number of vertices:");
-        numVertices = scan.nextInt();
-        matrix = new int[numVertices + 1][numVertices + 1];
-        System.out.println("Weighted matrix");
-        for (int s = 1; s <= numVertices; s++) {
-            for (int d = 1; d <= numVertices; d++) {
-            	matrix[s][d] = scan.nextInt();
-                if (s == d) {
-                	matrix[s][d] = 0;
-                    continue;
-                }
-                if (matrix[s][d] == 0) {
-                	matrix[s][d] = INFINITY;
-                }
-            }
+        Scanner s = new Scanner(System.in);
+        System.out.println("Enter the number of vertices and the number of edges:");
+        int numVertices = s.nextInt();
+        int numEdges = s.nextInt();   
+        int[][] graph = new int[numVertices + 1][numVertices + 1];
+        
+        for (int i = 1; i <= numVertices; i++) {
+            Arrays.fill(graph[i], INFINITY);
         }
-        System.out.println("The Transitive Closure of the Graph");
-        FloydWarshall floydwarshall = new FloydWarshall (numVertices);
-        floydwarshall.floydwarshall(matrix);
-        scan.close();
+        
+        for (int i = 1; i <= numEdges; i++) {
+        	int v1 = s.nextInt();
+        	int v2 = s.nextInt();
+        	graph[v1][v2] = s.nextInt();
+//        	graph[v2][v1] = graph[v1][v2]; // only if undirected graph
+        }
+        
+        System.out.println("All pairs shortest paths");
+        FloydWarshall f = new FloydWarshall(graph);
+        f.floydwarshall();
+        s.close();
     }
 }
